@@ -4,6 +4,7 @@
     <title>Heart Health Clinic Signup</title>
     <link rel="stylesheet" href="style4.css" />
     <style>
+      /* Make sure errors appear in red */
       .error {
         color: red;
       }
@@ -23,18 +24,21 @@
               />
             </div>
           </td>
-          <td align="center">
-            <h1>Heart Health Clinic</h1>
-          </td>
+          <td align="center"><h1>Heart Health Clinic</h1></td>
           <td valign="bottom" align="right" width="20%">
             <p>Today's Date: <span id="today"></span></p>
           </td>
         </tr>
       </table>
       <h2>Please fill out this form:</h2>
+      <!-- new: dynamic greeting goes here -->
+      <div id="greeting" style="margin-bottom: 1rem; font-weight: bold"></div>
     </header>
-
-    <form action="homework4-thankyou.html" id="signup" onsubmit="return validateForm()">
+  
+    <form action="homework4-thankyou.html"
+      id="signup"
+      onsubmit="return handleSubmit()"
+    >
       <fieldset>
         <legend>Personal Information</legend>
 
@@ -326,15 +330,14 @@ Describe any symptoms you have
           />
         </div>
       </fieldset>
+      <label style="margin: 1rem 0">
+        <input type="checkbox" id="remember-me" checked />
+        Remember me
+      </label>
 
       <div class="buttons">
-        <!-- SUBMIT button triggers validateForm() via onsubmit on the form -->
         <input type="submit" value="Submit" />
-
-        <!-- RESET button clears the form -->
         <input type="reset" value="Reset" />
-
-        <!-- REVIEW button calls reviewInput() with no submission -->
         <input
           type="button"
           name="review"
@@ -344,7 +347,16 @@ Describe any symptoms you have
         />
       </div>
     </form>
-
+    <section id="iframe-section">
+      <iframe
+        width="300"
+        height="300"
+        id="info-frame"
+        src="https://maps.google.com/maps?q=2001%20Commerce%20St,%20Houston,%20TX%2077002&output=embed"
+        title="Clinic Location"
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+      ></iframe>
+    </section>
     <footer>
       <p>
         &#169; 2025 Heart Health Clinic |
