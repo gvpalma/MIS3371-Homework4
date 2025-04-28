@@ -365,3 +365,84 @@ function reviewInput() {
 
   alert(message);
 }
+// ——————————————
+// COOKIE UTILS
+// ——————————————
+function setCookie(name, value, hours) {
+  const d = new Date();
+  d.setTime(d.getTime() + hours * 3600 * 1000);
+  document.cookie = `${name}=${encodeURIComponent(
+    value
+  )};expires=${d.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+  const re = new RegExp("(?:^|; )" + name + "=([^;]*)");
+  const match = document.cookie.match(re);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function deleteCookie(name) {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+}
+
+// ——————————————
+// GREETING / NEW-USER LOGIC
+// ——————————————
+function updateGreeting() {
+  const greetingDiv = document.getElementById("greeting");
+  const firstName = getCookie("firstName");
+  if (firstName) {
+    greetingDiv.innerHTML =
+      `Welcome back, ${firstName}. ` +
+      `<a href="#" id="notUserLink">Not ${firstName}? Start as new user.</a>`;
+
+    document.getElementById("notUserLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      newUser();
+    });
+  } else {
+    greetingDiv.textContent = "Welcome, new user!";
+  }
+}
+
+function newUser() {
+  deleteCookie("firstName");
+  document.getElementById("signup").reset();
+  updateGreeting();
+}
+
+// ——————————————
+// OVERRIDE SUBMIT TO HANDLE “REMEMBER ME”
+// ——————————————
+function handleSubmit() {
+  // first run your existing validations
+  if (!validateForm()) return false;
+
+  // if validation passed, check “remember me”
+  const firstName = document.getElementById("firstname").value.trim();
+  const remember = document.getElementById("remember-me").checked;
+
+  if (remember && firstName) {
+    // set cookie to expire in 48 hours
+    setCookie("firstName", firstName, 48);
+  } else {
+    // clear any existing cookie
+    deleteCookie("firstName");
+  }
+
+  // allow form to submit
+  return true;
+}
+
+// ——————————————
+// ON PAGE LOAD
+// ——————————————
+document.addEventListener("DOMContentLoaded", () => {
+  // show the date (your existing code)
+  const currentDate = new Date();
+  document.getElementById("today").innerHTML = currentDate.toLocaleDateString();
+
+  // initialize greeting (checks cookie)
+  updateGreeting();
+});
